@@ -15,7 +15,7 @@ apply plugin: "org.jetbrains.kotlin.kapt"
 apply plugin: 'com.github.johnrengelman.shadow'
 
 group = 'eu.automateeverything'
-version = '1.0'
+version = '0.1.0'
 ext.pluginsDir = '../automate-everything/output/plugins'
 
 repositories {
@@ -30,7 +30,7 @@ jar {
     manifest {
         attributes 'Plugin-Class': "eu.automateeverything.alarmplugin.AlarmPlugin",
                 'Plugin-Id': "alarm",
-                'Plugin-Version': "1.0-dev",
+                'Plugin-Version': "0.1.0",
                 'Plugin-Provider': "Tomasz Babiuk",
                 'Plugin-Dependencies': ""
     }
