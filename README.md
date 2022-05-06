@@ -1,6 +1,6 @@
-# Alarm devices for Automate-Everything
+# Welcome
 
-This is a plugin for [Automate-Everything](https://github.com/tomaszbabiuk/automate-everything)
+This is a plugin for [Automate-Everything](https://github.com/tomaszbabiuk/automate-everything). It provides a support for Alarm devices.
 
 # Directory setup
 ```bash
@@ -38,7 +38,7 @@ After running this task, the plugin is installed in 'automate-everything/output/
 cd output
 java -jar output/bin/ae-backend-all.jar
 ```
-After running the server, go to http://localhost/plugins/objects and enable "Alarm plugin"
+After running the server, go to http://localhost/plugins/objects and enable "Alarm" plugin
 
 # Debugging
 Run in IntelliJ Idea. Debug as "JAR application". 
