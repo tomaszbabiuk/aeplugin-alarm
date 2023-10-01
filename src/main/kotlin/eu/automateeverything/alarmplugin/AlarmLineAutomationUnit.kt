@@ -22,7 +22,7 @@ import eu.automateeverything.domain.automation.StateDeviceAutomationUnitBase
 import eu.automateeverything.domain.configurable.Duration
 import eu.automateeverything.domain.events.EventBus
 import eu.automateeverything.domain.hardware.BinaryInput
-import eu.automateeverything.domain.hardware.InputPort
+import eu.automateeverything.domain.hardware.Port
 import java.util.*
 
 class AlarmLineAutomationUnit(
@@ -30,7 +30,7 @@ class AlarmLineAutomationUnit(
     instance: InstanceDto,
     name: String,
     states: Map<String, State>,
-    private val inputPort: InputPort<BinaryInput>,
+    private val inputPort: Port<BinaryInput>,
     private val contactType: ContactType,
     delayTime: Duration
 ) : StateDeviceAutomationUnitBase(eventBus, instance, name, ControlType.States, states, false) {
@@ -40,11 +40,10 @@ class AlarmLineAutomationUnit(
     private var lastBreachedTime: Calendar? = null
     private var lineBreached = false
 
-    override fun applyNewState(state: String) {
-    }
+    override fun applyNewState(state: String) {}
 
     override val usedPortsIds: Array<String>
-        get() = arrayOf(inputPort.id)
+        get() = arrayOf(inputPort.portId)
 
     override val recalculateOnTimeChange = true
     override val recalculateOnPortUpdate = true
