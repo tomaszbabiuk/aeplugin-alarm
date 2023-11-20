@@ -25,21 +25,21 @@ import eu.automateeverything.domain.events.EventBus
 import org.pf4j.Extension
 
 @Extension
-class AlarmZoneConfigurable(
-    private val eventBus: EventBus
-) : StateDeviceConfigurable() {
+class AlarmZoneConfigurable(private val eventBus: EventBus) : StateDeviceConfigurable() {
 
     override val parent: Class<out Configurable>
         get() = AlarmDevicesConfigurable::class.java
 
-    private val alarmLinesField = InstanceReferenceField(FIELD_ALARM_LINES, R.field_alarm_lines_hint,
-        InstanceReference(AlarmLineConfigurable::class.java, InstanceReferenceType.Multiple),
-        RequiredStringValidator()
-    )
+    private val alarmLinesField =
+        InstanceReferenceField(
+            FIELD_ALARM_LINES,
+            R.field_alarm_lines_hint,
+            InstanceReference(AlarmLineConfigurable::class.java, InstanceReferenceType.Multiple),
+            RequiredStringValidator()
+        )
 
-    private val leavingTimeField = DurationField(FIELD_LEAVING_TIME, R.field_leaving_time_hint,
-        Duration(0)
-    )
+    private val leavingTimeField =
+        DurationField(FIELD_LEAVING_TIME, R.field_leaving_time_hint, Duration(0))
 
     override fun buildAutomationUnit(instance: InstanceDto): AutomationUnit<State> {
         val name = extractFieldValue(instance, nameField)
@@ -52,41 +52,32 @@ class AlarmZoneConfigurable(
     override val states: Map<String, State>
         get() {
             val states: MutableMap<String, State> = HashMap()
-            states[STATE_UNKNOWN] = State.buildReadOnlyState(
-                STATE_UNKNOWN,
-                R.state_unknown,
-            )
-            states[STATE_DISARMED] = State.buildControlState(
-                STATE_DISARMED,
-                R.state_disarmed,
-                R.action_disarm
-            )
-            states[STATE_ARMED] = State.buildControlState(
-                STATE_ARMED,
-                R.state_armed,
-                R.action_arm,
-            )
-            states[STATE_LEAVING] = State.buildControlState(
-                STATE_LEAVING,
-                R.state_leaving,
-                R.action_count
-            )
-            states[STATE_PREALARM] = State.buildReadOnlyState(
-                STATE_PREALARM,
-                R.state_prealarm,
-                isSignaled = true
-            )
-            states[STATE_ALARM] = State.buildReadOnlyState(
-                STATE_ALARM,
-                R.state_alarm,
-                isSignaled = true
-            )
+            states[STATE_INIT] =
+                State.buildReadOnlyState(
+                    STATE_INIT,
+                    R.state_unknown,
+                )
+            states[STATE_DISARMED] =
+                State.buildControlState(STATE_DISARMED, R.state_disarmed, R.action_disarm)
+            states[STATE_ARMED] =
+                State.buildControlState(
+                    STATE_ARMED,
+                    R.state_armed,
+                    R.action_arm,
+                )
+            states[STATE_LEAVING] =
+                State.buildControlState(STATE_LEAVING, R.state_leaving, R.action_count)
+            states[STATE_PREALARM] =
+                State.buildReadOnlyState(STATE_PREALARM, R.state_prealarm, isSignaled = true)
+            states[STATE_ALARM] =
+                State.buildReadOnlyState(STATE_ALARM, R.state_alarm, isSignaled = true)
             return states
         }
 
     override val fieldDefinitions: Map<String, FieldDefinition<*>>
         get() {
-            val result: MutableMap<String, FieldDefinition<*>> = LinkedHashMap(super.fieldDefinitions)
+            val result: MutableMap<String, FieldDefinition<*>> =
+                LinkedHashMap(super.fieldDefinitions)
             result[FIELD_LEAVING_TIME] = leavingTimeField
             result[FIELD_ALARM_LINES] = alarmLinesField
             return result
@@ -98,7 +89,8 @@ class AlarmZoneConfigurable(
     override val descriptionRes = R.configurable_alarmzone_description
 
     override val iconRaw: String
-        get() = """
+        get() =
+            """
             <svg width="100" height="100" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
              <g>
               <title>Layer 1</title>
@@ -108,7 +100,8 @@ class AlarmZoneConfigurable(
               <path id="svg_6" d="m34.965,61.589c0,1.954 1.584,3.538 3.538,3.538l23.335,0c1.952,0 3.537,-1.584 3.537,-3.538l0,-2.999l-30.41,0l0,2.999z"/>
              </g>
             </svg>
-        """.trimIndent()
+        """
+                .trimIndent()
 
     companion object {
         const val FIELD_ALARM_LINES = "alarmLines"
@@ -120,4 +113,3 @@ class AlarmZoneConfigurable(
         const val STATE_ALARM = "alarm"
     }
 }
-

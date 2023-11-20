@@ -26,7 +26,7 @@ import eu.automateeverything.data.instances.InstanceDto
 import eu.automateeverything.domain.automation.AutomationUnit
 import eu.automateeverything.domain.automation.StateDeviceAutomationUnitBase
 import eu.automateeverything.domain.configurable.Duration
-import eu.automateeverything.domain.configurable.StateDeviceConfigurable.Companion.STATE_UNKNOWN
+import eu.automateeverything.domain.configurable.StateDeviceConfigurable.Companion.STATE_INIT
 import eu.automateeverything.domain.events.EventBus
 import java.util.*
 
@@ -51,10 +51,8 @@ class AlarmZoneAutomationUnit(
             STATE_LEAVING -> {
                 leavingStartedAtTicks = Calendar.getInstance().timeInMillis
             }
-            STATE_PREALARM -> {
-            }
-            STATE_ALARM -> {
-            }
+            STATE_PREALARM -> {}
+            STATE_ALARM -> {}
         }
     }
 
@@ -70,7 +68,7 @@ class AlarmZoneAutomationUnit(
     override val recalculateOnPortUpdate = true
 
     override fun calculateInternal(now: Calendar) {
-        if (currentState.id == STATE_UNKNOWN) {
+        if (currentState.id == STATE_INIT) {
             changeState(STATE_DISARMED)
             return
         }
@@ -97,7 +95,9 @@ class AlarmZoneAutomationUnit(
         }
 
         if (currentState.id === STATE_PREALARM) {
-            for (alarmSensorAutomationUnit in alarmLineUnits) if (alarmSensorAutomationUnit.isAlarm()) {
+            for (alarmSensorAutomationUnit in alarmLineUnits) if (
+                alarmSensorAutomationUnit.isAlarm()
+            ) {
                 sensorThatCausedTheAlarm = alarmSensorAutomationUnit
                 changeState(STATE_ALARM)
                 return
@@ -105,9 +105,9 @@ class AlarmZoneAutomationUnit(
         }
     }
 
-
     override fun bind(automationUnitsCache: HashMap<Long, Pair<InstanceDto, AutomationUnit<*>>>) {
-        alarmLineUnits = alarmLineIds.map { automationUnitsCache[it]!!.second as AlarmLineAutomationUnit }
+        alarmLineUnits =
+            alarmLineIds.map { automationUnitsCache[it]!!.second as AlarmLineAutomationUnit }
     }
 
     private fun armAlarmSensors() {
